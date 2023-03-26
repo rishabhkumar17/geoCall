@@ -1,3 +1,5 @@
+const { disconnect } = require("process");
+
 const express = require("express"),
   app = express(),
   http = require("http"),
@@ -21,6 +23,10 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log(`user connected of the id: ${socket.id}`);
+
+  socket.on("disconnect", () => {
+    disconnectEventHandler(socket.id);
+  });
 });
 
 const PORT = process.env.PORT || 3003;
@@ -28,3 +34,9 @@ const PORT = process.env.PORT || 3003;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Socket events
+
+const disconnectEventHandler = (id) => {
+  console.log(`user disconnected of the id: ${id}`);
+};
